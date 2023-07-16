@@ -8,7 +8,7 @@ import (
 
 type TransactionRepository interface {
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
-	UpdateTransaction(status string) (models.Transaction, error)
+	UpdateTransaction(status string, ID int) (models.Transaction, error)
 	FindTransaction() ([]models.Transaction, error)
 	GetTransaction(ID int) (models.Transaction, error)
 	GetPayment(transaction models.Transaction) (models.Transaction, error)
@@ -30,8 +30,14 @@ func (r *repository) CreateTransaction(transaction models.Transaction) (models.T
 }
 
 // UpdateTransaction
-func (r *repository) UpdateTransaction(status string) (models.Transaction, error) {
+func (r *repository) UpdateTransaction(status string, ID int) (models.Transaction, error) {
 	var transaction models.Transaction
+
+	r.db.First(&transaction, ID)
+
+	if status != transaction.Status && status == "success" {
+		r.db.First(&transaction, transaction.ID)
+	}
 
 	transaction.Status = status
 	err := r.db.Save(&transaction).Error

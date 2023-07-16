@@ -52,14 +52,14 @@ function Header() {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Link to={"/tambahtiket"} style={{textDecoration:"none"}}>
+                      <Link to="/tambahtiket" style={{textDecoration:"none"}}>
                         <Dropdown.Item href="#/action-1">
                           Tambah Tiket
                         </Dropdown.Item>
                       </Link>
                       <Dropdown.Divider />
                       <Dropdown.Item href="#" onClick={logout}>
-                        <Link to={"/"} style={{textDecoration:"none"}}>Logout</Link>
+                        <Link to="/" style={{textDecoration:"none"}}>Logout</Link>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -72,18 +72,18 @@ function Header() {
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Link to={"/tiketsaya"} style={{textDecoration:"none"}}>
+                      <Link to="/tiketsaya" style={{textDecoration:"none"}}>
                         <Dropdown.Item href="#/action-1">
                           Tiket Saya
                         </Dropdown.Item>
                       </Link>
 
-                      <Link to={"/invoice"} style={{textDecoration:"none"}}>
+                      <Link to="/invoice" style={{textDecoration:"none"}}>
                         <Dropdown.Item href="#/action-2">Payment</Dropdown.Item>
                       </Link>
                       <Dropdown.Divider />
                       <Dropdown.Item href="#" onClick={logout}>
-                        <Link to={"/"} style={{textDecoration:"none"}}>Logout</Link>
+                        <Link to="/" style={{textDecoration:"none"}}>Logout</Link>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

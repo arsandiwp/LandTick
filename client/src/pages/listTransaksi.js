@@ -42,7 +42,7 @@ function ListTransaksi() {
     async () => {
       const response = await API.get("/transactions");
       console.log(transactions);
-      return response.data.data;
+      return response?.data?.data;
     }
   );
 
@@ -52,6 +52,7 @@ function ListTransaksi() {
       deleteById.mutate(idDelete);
       setConfrimDelete(null);
     }
+    // eslint-disable-next-line
   }, [confirmDelete]);
 
   return (
@@ -80,7 +81,7 @@ function ListTransaksi() {
         </Row>
         {transactions?.map((data, index) => (
           <Row>
-            <Col>
+            <Col key={index}>
               <p>{index + 1}</p>
             </Col>
             <Col>

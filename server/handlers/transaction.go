@@ -181,23 +181,26 @@ func (h *handlerTransaction) Notification(c echo.Context) error {
 
 	transactionStatus := notificationPayload["transaction_status"].(string)
 	fraudStatus := notificationPayload["fraud_status"].(string)
+	orderId := notificationPayload["order_id"].(string)
+
+	order_Id, _ := strconv.Atoi(orderId)
 
 	fmt.Println("ini payload maszehh", notificationPayload)
 
 	if transactionStatus == "capture" {
 		if fraudStatus == "challenge" {
-			h.TransactionRepository.UpdateTransaction("pending")
+			h.TransactionRepository.UpdateTransaction("pending", order_Id)
 		} else if fraudStatus == "accept" {
-			h.TransactionRepository.UpdateTransaction("success")
+			h.TransactionRepository.UpdateTransaction("success", order_Id)
 		}
 	} else if transactionStatus == "settlement" {
-		h.TransactionRepository.UpdateTransaction("success")
+		h.TransactionRepository.UpdateTransaction("success", order_Id)
 	} else if transactionStatus == "deny" {
-		h.TransactionRepository.UpdateTransaction("failed")
+		h.TransactionRepository.UpdateTransaction("failed", order_Id)
 	} else if transactionStatus == "cancel" || transactionStatus == "expire" {
-		h.TransactionRepository.UpdateTransaction("failed")
+		h.TransactionRepository.UpdateTransaction("failed", order_Id)
 	} else if transactionStatus == "pending" {
-		h.TransactionRepository.UpdateTransaction("pending")
+		h.TransactionRepository.UpdateTransaction("pending", order_Id)
 	}
 
 	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: notificationPayload})

@@ -1,8 +1,12 @@
 import axios from 'axios';
 
+
+export function getApi () {
+    console.log("ini base url", process.env.REACT_APP_BASE_URL)
+}
 // membuat base URL
 export const API = axios.create({
-    baseURL: 'http://localhost:5000/api/v1/',
+    baseURL: process.env.REACT_APP_BASE_URL
 });
 
 // men set Auth Token 

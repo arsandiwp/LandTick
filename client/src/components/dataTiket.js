@@ -7,17 +7,24 @@ import Daftar from "../pages/daftar";
 import ModalData from "./modalData";
 
 import { useQuery } from "react-query";
-import { API, setAuthToken } from "../config/api";
+import { API, setAuthToken, getApi } from "../config/api";
+
 
 
 function DataTiket() {
 
   setAuthToken(localStorage.token);
 
-  let { data: tickets } = useQuery("ticketsCache", async () => {
+  let { data: ticket } = useQuery("ticketsHomeCache", async () => {
     const response = await API.get("/tickets");
-    return response.data.data;
+    console.log("ini respon", response)
+    return response?.data?.data
   });
+
+  getApi()
+
+  console.log("ini ticket", ticket)
+
 
   const handleBuy = async (id) => {
     try {
@@ -58,7 +65,7 @@ function DataTiket() {
           <p>Harga Per Orang</p>
         </Col>
       </Row>
-      {tickets?.map((data, index) => (
+      {ticket?.map((data, index) => (
         <Row
           className="border pt-2 mb-4"
           style={{ cursor: "pointer" }}

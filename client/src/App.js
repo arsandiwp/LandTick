@@ -2,7 +2,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/home";
 import Tiketsaya from "./components/tiketSaya";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import Header from "./components/header";
 import Invoice from "./components/invoice";
 import TambahTiket from "./components/tambahTiket";
@@ -24,6 +25,7 @@ function App() {
     } else {
       setIsLoading(false);
     }
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ function App() {
         navigate("/");
       }
     }
+    // eslint-disable-next-line
   }, [isLoading]);
 
   const checkUser = async () => {
