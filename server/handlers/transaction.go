@@ -6,6 +6,7 @@ import (
 	transactiondto "landtick/dto/transaction"
 	"landtick/models"
 	"landtick/repositories"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -16,6 +17,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
+	"gopkg.in/gomail.v2"
 )
 
 var path_file = "http://localhost:5000/uploads/"
@@ -187,13 +189,19 @@ func (h *handlerTransaction) Notification(c echo.Context) error {
 
 	fmt.Println("ini payload maszehh", notificationPayload)
 
+	transaction, _ := h.TransactionRepository.GetTransaction(order_Id)
+	user, _ := h.UserRepository.GetUser(order_Id)
 	if transactionStatus == "capture" {
 		if fraudStatus == "challenge" {
 			h.TransactionRepository.UpdateTransaction("pending", order_Id)
 		} else if fraudStatus == "accept" {
+
+			SendMail("success", transaction, user)
 			h.TransactionRepository.UpdateTransaction("success", order_Id)
 		}
 	} else if transactionStatus == "settlement" {
+
+		SendMail("success", transaction, user)
 		h.TransactionRepository.UpdateTransaction("success", order_Id)
 	} else if transactionStatus == "deny" {
 		h.TransactionRepository.UpdateTransaction("failed", order_Id)
@@ -205,4 +213,61 @@ func (h *handlerTransaction) Notification(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: notificationPayload})
 
+}
+
+// SendMail
+
+func SendMail(status string, transaction models.Transaction, user models.User) {
+	if status != transaction.Status && (status == "success") {
+
+		var CONFIG_SMTP_HOST = "smtp.gmail.com"
+		var CONFIG_SMTP_PORT = 587
+		var CONFIG_SENDER_NAME = "LandTick <demo.landtick@gmail.com>"
+		var CONFIG_AUTH_EMAIL = os.Getenv("EMAIL_SYSTEM")
+		var CONFIG_AUTH_PASSWORD = os.Getenv("PASSWORD_SYSTEM")
+
+		var ticket = strconv.Itoa(transaction.ID)
+		var price = strconv.Itoa(transaction.Ticket.Price)
+
+		mailer := gomail.NewMessage()
+		mailer.SetHeader("From", CONFIG_SENDER_NAME)
+		mailer.SetHeader("To", transaction.User.Email)
+		mailer.SetHeader("Subject", "Transaction Status")
+		mailer.SetBody("text/html", fmt.Sprintf(`<!DOCTYPE html>
+    <html lang="en">
+      <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <style>
+        h1 {
+        color: brown;
+        }
+      </style>
+      </head>
+      <body>
+      <h2>Product payment :</h2>
+      <ul style="list-style-type:none;">
+        <li>Name : %s</li>
+        <li>Total payment: Rp.%s</li>
+        <li>Status : <b>%s</b></li>
+      </ul>
+      </body>
+    </html>`, ticket, price, status))
+
+		dialer := gomail.NewDialer(
+			CONFIG_SMTP_HOST,
+			CONFIG_SMTP_PORT,
+			CONFIG_AUTH_EMAIL,
+			CONFIG_AUTH_PASSWORD,
+		)
+
+		err := dialer.DialAndSend(mailer)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Println("Mail sent! to " + transaction.User.Email)
+	}
 }
