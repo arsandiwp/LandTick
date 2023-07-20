@@ -84,11 +84,9 @@ func (h *handlerTicket) FindTicket(c echo.Context) error {
 
 // FilterTicket
 func (h *handlerTicket) FilterTicket(c echo.Context) error {
-	date := c.QueryParam("start_date")
+
 	startStationIDParam := c.QueryParam("start_station_id")
 	destinationStationIDParam := c.QueryParam("destination_station_id")
-
-	fmt.Println(date)
 
 	var startStationID int
 	if startStationIDParam != "" {
@@ -112,7 +110,7 @@ func (h *handlerTicket) FilterTicket(c echo.Context) error {
 
 	fmt.Println(destinationStationID)
 
-	ticket, err := h.TicketRepository.FilterTicket(date, startStationID, destinationStationID)
+	ticket, err := h.TicketRepository.FilterTicket(startStationID, destinationStationID)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}

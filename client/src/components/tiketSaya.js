@@ -16,20 +16,20 @@ function Tiketsaya() {
 
   const handleBuy = async (id) => {
     try {
-      const response = await API.get(`/transactions/${id}`)
-      navigate(`/invoice/${id}`)
-      return response.data.data
+      const response = await API.get(`/transactions/${id}`);
+      navigate(`/invoice/${id}`);
+      return response.data.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <Container className="">
       <h2 className="my-4">Tiket Saya</h2>
       {myTicket?.map((data, index) => (
         <div
-          className="mx-auto shadow bg-body rounded p-3"
+          className="mx-auto shadow bg-body rounded p-3 mb-5"
           style={{ width: "90%" }}
         >
           <Row className="" key={index}>
@@ -38,7 +38,7 @@ function Tiketsaya() {
                 src={Train}
                 className="d-inline-block align-top ps-3 pe-5 bg-danger bg-gradient"
                 alt="Brand"
-                style={{ borderEndEndRadius: 50, marginTop:"-15px"}}
+                style={{ borderEndEndRadius: 50, marginTop: "-15px" }}
               />
             </Col>
             <Col md={{ span: 4, offset: 4 }} className="text-end">
@@ -64,7 +64,22 @@ function Tiketsaya() {
 
           <Row className="mb-3">
             <Col md={3} className="">
-              <p className="">{data.status}</p>
+              {data.status === "Pending" && (
+                <div
+                  className="bg-danger text-center rounded text-light"
+                  style={{ width: "80px" }}
+                >
+                  <p className="">{data.status}</p>
+                </div>
+              )}
+              {data.status === "success" && (
+                <div
+                  className="bg-success text-center rounded text-light"
+                  style={{ width: "80px" }}
+                >
+                  <p className="">{data.status}</p>
+                </div>
+              )}
             </Col>
             <Col md={3}>
               <h5>{data.ticket.arival_time}</h5>
@@ -72,7 +87,9 @@ function Tiketsaya() {
             </Col>
             <Col md={3}>
               <h5>Surabaya (SBY)</h5>
-              <p className="text-secondary">{data.ticket.destination_station.name}</p>
+              <p className="text-secondary">
+                {data.ticket.destination_station.name}
+              </p>
             </Col>
           </Row>
 
@@ -107,7 +124,7 @@ function Tiketsaya() {
               <p>{data.user.email}</p>
             </Col>
             <Col>
-
+              {data.status === "Pending" && (
                 <Button
                   variant="danger"
                   type="submit"
@@ -116,7 +133,12 @@ function Tiketsaya() {
                 >
                   Bayar Sekarang
                 </Button>
-
+              )}
+              {data.status === "success" && (
+                <Button variant="success" className="w-100">
+                  Sudah Bayar
+                </Button>
+              )}
             </Col>
           </Row>
         </div>

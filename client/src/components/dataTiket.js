@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import Arrow from "../assets/img/Arrow.png";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import Login from "../pages/login";
 import Daftar from "../pages/daftar";
@@ -11,17 +11,20 @@ import { API, setAuthToken, getApi } from "../config/api";
 
 
 
-function DataTiket() {
+function DataTiket({startStation, destinationStation, search}) {
 
   setAuthToken(localStorage.token);
 
-  let { data: ticket } = useQuery("ticketsHomeCache", async () => {
-    const response = await API.get("/tickets");
+
+  let { data: ticket, refetch } = 
+  useQuery("ticketsHomeCache", async () => {
+    const response = search? (await API.get(`/ticket?start_station_id=${startStation}&destination_station_id=${destinationStation}`))
+    : (await API.get("/tickets"))
     console.log("ini respon", response)
-    return response?.data?.data
+    return response.data.data
   });
 
-  getApi()
+ getApi()
 
   console.log("ini ticket", ticket)
 
@@ -45,26 +48,13 @@ function DataTiket() {
   const [showDaftar, setShowDaftar] = useState(false);
   const [showData, setShowData] = useState(false);
 
+  useEffect(() => {
+    refetch();
+  }, [search]);
+
   return (
-    <Container className="text-center mt-5">
-      <Row className="my-3">
-        <Col>
-          <p>Nama kereta</p>
-        </Col>
-        <Col>
-          <p>Berangkat</p>
-        </Col>
-        <Col></Col>
-        <Col>
-          <p>Tiba</p>
-        </Col>
-        <Col>
-          <p>Durasi</p>
-        </Col>
-        <Col md={4}>
-          <p>Harga Per Orang</p>
-        </Col>
-      </Row>
+    <Container className="text-center mt-3">
+
       {ticket?.map((data, index) => (
         <Row
           className="border pt-2 mb-4"

@@ -9,7 +9,7 @@ import (
 type TicketRepository interface {
 	CreateTicket(ticket models.Ticket) (models.Ticket, error)
 	FindTicket() ([]models.Ticket, error)
-	FilterTicket(StartDate string, StartStationID, DestinationStationID int) ([]models.Ticket, error)
+	FilterTicket(StartStationID, DestinationStationID int) ([]models.Ticket, error)
 }
 
 func RepositoryTicket(db *gorm.DB) *repository {
@@ -32,9 +32,9 @@ func (r *repository) FindTicket() ([]models.Ticket, error) {
 }
 
 // FilterTicket
-func (r *repository) FilterTicket(StartDate string, StartStationID, DestinationStationID int) ([]models.Ticket, error) {
+func (r *repository) FilterTicket(StartStationID, DestinationStationID int) ([]models.Ticket, error) {
 	var tickets []models.Ticket
-	err := r.db.Where("start_date = ? AND start_station_id = ? AND destination_station_id = ?", StartDate, StartStationID, DestinationStationID).Preload("StartStation").Preload("DestinationStation").Find(&tickets).Error
+	err := r.db.Where("start_station_id = ? AND destination_station_id = ?", StartStationID, DestinationStationID).Preload("StartStation").Preload("DestinationStation").Find(&tickets).Error
 
 	return tickets, err
 }

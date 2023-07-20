@@ -70,9 +70,6 @@ function ListTransaksi() {
             <p>Tiket</p>
           </Col>
           <Col>
-            <p>Bukti Transfer</p>
-          </Col>
-          <Col>
             <p>Status Payment</p>
           </Col>
           <Col>
@@ -92,9 +89,6 @@ function ListTransaksi() {
                 {data.ticket.start_station.name} -{" "}
                 {data.ticket.destination_station.name}
               </p>
-            </Col>
-            <Col>
-              <p>Bri.jpg</p>
             </Col>
             <Col>
               <p>{data.status}</p>

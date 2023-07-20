@@ -2,8 +2,13 @@ import { Navbar, Container, Button, Dropdown } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
 import { Link } from "react-router-dom";
-import LandTick from "../assets/img/landtick.png"
-import Train from "../assets/img/Train.png"
+import LandTick from "../assets/img/landtick.png";
+import Train from "../assets/img/Train.png";
+import Boy from "../assets/img/boy.png";
+import Ticket from "../assets/img/ticket.png";
+import Bill from "../assets/img/bill.png";
+import Out from "../assets/img/logout.png";
+import More from "../assets/img/more.png";
 import Login from "../pages/login";
 import Daftar from "../pages/daftar";
 
@@ -15,7 +20,7 @@ function Header() {
   // menggunakan Context dari userContext yang sudah dibuat
   const [state, dispatch] = useContext(UserContext);
 
-  // mengembalikan nilai state ketika login 
+  // mengembalikan nilai state ketika login
   const logout = () => {
     dispatch({
       type: "LOGOUT",
@@ -26,18 +31,10 @@ function Header() {
     <>
       <Navbar className="shadow bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="#home" className="fw-bold" >
-            <Link to="/" style={{textDecoration:"none"}}>
-              <img
-                src={LandTick}
-                className="d-inline-block "
-                alt="Brand"
-              />
-              <img
-                src={Train}
-                className="d-inline-block "
-                alt="Brand"
-              />
+          <Navbar.Brand href="#home" className="fw-bold">
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <img src={LandTick} className="d-inline-block " alt="Brand" />
+              <img src={Train} className="d-inline-block " alt="Brand" />
             </Link>
           </Navbar.Brand>
           <Navbar.Toggle />
@@ -47,19 +44,30 @@ function Header() {
               {state.user.role === "admin" ? (
                 <>
                   <Dropdown>
-                    <Dropdown.Toggle variant="warning" id="dropdown-basic">
-                      {state.user.username}
+                    <Dropdown.Toggle
+                      variant="light"
+                      className="fs-4 fw-bold text-danger bg-gradient"
+                      id="dropdown-basic"
+                    >
+                      {state.user.username}{" "}
+                      <img src={Boy} className="" alt="boy" />
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Link to="/tambahtiket" style={{textDecoration:"none"}}>
+                      <Link
+                        to="/tambahtiket"
+                        style={{ textDecoration: "none" }}
+                      >
                         <Dropdown.Item href="#/action-1">
-                          Tambah Tiket
+                          <img src={More} className="" alt="icket" /> Tambah
+                          Tiket
                         </Dropdown.Item>
                       </Link>
                       <Dropdown.Divider />
                       <Dropdown.Item href="#" onClick={logout}>
-                        <Link to="/" style={{textDecoration:"none"}}>Logout</Link>
+                        <Link to="/" style={{ textDecoration: "none", color: "black" }}>
+                          <img src={Out} className="" alt="icket" /> Logout
+                        </Link>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -67,23 +75,36 @@ function Header() {
               ) : state.isLogin ? (
                 <>
                   <Dropdown>
-                    <Dropdown.Toggle variant="warning" id="dropdown-basic">
-                      {state.user.username}
+                    <Dropdown.Toggle
+                      variant="light"
+                      className="fs-4 fw-bold text-danger bg-gradient"
+                      id="dropdown-basic"
+                    >
+                      {state.user.username}{" "}
+                      <img src={Boy} className="" alt="boy" />
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      <Link to="/tiketsaya" style={{textDecoration:"none"}}>
-                        <Dropdown.Item href="#/action-1">
-                          Tiket Saya
+                      <Link to="/tiketsaya" style={{ textDecoration: "none" }}>
+                        <Dropdown.Item href="#/action-1" className="fs-6">
+                          <img src={Ticket} className="" alt="icket" /> My
+                          Ticket
                         </Dropdown.Item>
                       </Link>
 
-                      <Link to="/invoice" style={{textDecoration:"none"}}>
-                        <Dropdown.Item href="#/action-2">Payment</Dropdown.Item>
+                      <Link to="/invoice" style={{ textDecoration: "none" }}>
+                        <Dropdown.Item href="#/action-2">
+                          <img src={Bill} className="" alt="icket" /> Payment
+                        </Dropdown.Item>
                       </Link>
                       <Dropdown.Divider />
                       <Dropdown.Item href="#" onClick={logout}>
-                        <Link to="/" style={{textDecoration:"none"}}>Logout</Link>
+                        <Link
+                          to="/"
+                          style={{ textDecoration: "none", color: "black" }}
+                        >
+                          <img src={Out} className="" alt="icket" /> Logout
+                        </Link>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
@@ -111,17 +132,13 @@ function Header() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-          
+
       <Login
         show={showLogin}
         showLogin={setShowLogin}
         showDaftar={setShowDaftar}
       />
-      <Daftar 
-        show={showDaftar} 
-        showDaftar={setShowDaftar} 
-      />
-        
+      <Daftar show={showDaftar} showDaftar={setShowDaftar} />
     </>
   );
 }

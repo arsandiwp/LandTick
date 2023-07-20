@@ -10,7 +10,7 @@ function Home() {
             {/* <Header /> */}
             <Jumbotron />
             <Tiket />
-            <DataTiket />
+            {/* <DataTiket /> */}
             <div>
                 
             </div>
